@@ -40,10 +40,18 @@ for i, char in enumerate(CHARS):
     metrics[char] = {"x": x, "y": y, "w": w, "h": h}
 
 atlas_path = f"{OUT_PREFIX}_atlas.png"
-metrics_path = f"{OUT_PREFIX}_metrics.json"
+metrics_path = f"{OUT_PREFIX}_metrics.fntmeta"
 
 atlas.save(atlas_path)
 with open(metrics_path, "w") as f:
-    json.dump(metrics, f, indent=2)
+    f.write(f"# FONT{FONT_SIZE}\n")
+    f.write(f"# {cell_w} {cell_h}\n")
+    for char in CHARS:
+        code = ord(char)
+        x = metrics[char]["x"]
+        y = metrics[char]["y"]
+        w = metrics[char]["w"]
+        h = metrics[char]["h"]
+        f.write(f"{code} {x} {y} {w} {h}\n")
 
 print(f"✅ Saved: {atlas_path}, {metrics_path}")
